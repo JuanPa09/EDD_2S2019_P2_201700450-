@@ -8,6 +8,14 @@ class NodoLista():
         self.siguiente=None
         self.anterior=None
 
+class NodoRArbol():
+	def __init__(self,carne,nombre):
+		self.carne=carne
+		self.nombre=nombre
+		self.siguiente=None
+		self.siguiente=None
+
+
 class Nodojson():
     def __init__(self,json):
         self.json=json
@@ -74,12 +82,27 @@ class ListaDoble():
             self.inicio.anterior=self.final
         self.size+=1
 
+    def insertarR(self,carne,nombre):
+        nuevo=NodoRArbol(carne,nombre)
+        if self.Vacia():
+            #Esta Vacia
+            self.inicio=nuevo
+            self.final=nuevo
+            nuevo.siguiente=None
+        else:
+            self.final.siguiente=nuevo
+            self.final=nuevo
+        self.size+=1
+
     def imprimir(self):
         temporal=self.inicio
         print("Inicio A Fin")
         for i in range(self.size):
             print("Nombre: "+temporal.json)
             temporal=temporal.siguiente
+
+
+
 
 class ArbolBinarioFE():
     def __init__(self):

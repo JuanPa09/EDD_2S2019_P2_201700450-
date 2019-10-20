@@ -2,6 +2,8 @@ import pandas as pd
 import json,sys
 from datetime import datetime
 from Graficas import Diagramas
+from Estructuras import Arbol
+from Estructuras import ListaDoble
 class CargaMasiva():
 
     def __init__(self):
@@ -59,13 +61,83 @@ class CargaMasiva():
             self.a=1   
 
         
-    def ArbolBinario(self,jsonn,avltree):
+    def ArbolBinario(self,jsonn):
+        avltree=Arbol()
         data=json.loads(jsonn)
         #dat=json.dumps(data)
         self.getData(data['DATA'],avltree)
         avltree.crearArbol()
         self.diagramar.Darbol(avltree.arbol.raiz)
         self.diagramar.Graficar()
+
+    def Arbolpre(self,jsonn):
+        avltree=Arbol()
+        lista=ListaDoble()
+        data=json.loads(jsonn)
+        #dat=json.dumps(data)
+        self.getData(data['DATA'],avltree)
+        avltree.crearArbol()
+        self.diagramar.graphpre(avltree.arbol.raiz,lista)
+        self.diagramar.Graficar()
+
+    def Arbolin(self,jsonn):
+        avltree=Arbol()
+        lista=ListaDoble()
+        data=json.loads(jsonn)
+        #dat=json.dumps(data)
+        self.getData(data['DATA'],avltree)
+        avltree.crearArbol()
+        self.diagramar.graphin(avltree.arbol.raiz,lista)
+        self.diagramar.Graficar()
+
+    def Arbolpost(self,jsonn):
+        avltree=Arbol()
+        lista=ListaDoble()
+        data=json.loads(jsonn)
+        #dat=json.dumps(data)
+        self.getData(data['DATA'],avltree)
+        avltree.crearArbol()
+        self.diagramar.graphpost(avltree.arbol.raiz,lista)
+        self.diagramar.Graficar()
+        
+    def ListaArboles(self,lista):
+        listt=ListaDoble()
+        temp=lista.inicio
+        #while temp!=None:
+        #    data=json.loads(temp.json)
+        #    
+        #    timestap=data['TIMESTAMP']
+        #    classs=data['CLASS']
+        #    phash=data["PREVIOUSHASH"]
+        #    hashh=data["HASH"]
+        #    print(hashh)
+        #    listt.insertar(classs,timestap,phash,hashh)
+        #    temp=temp.siguiente
+        if temp.siguiente==None:
+            data=json.loads(temp.json)
+            
+            timestap=data['TIMESTAMP']
+            classs=data['CLASS']
+            phash=data["PREVIOUSHASH"]
+            hashh=data["HASH"]
+            listt.insertar(classs,timestap,phash,hashh)
+        else:
+            while True:
+                data=json.loads(temp.json)
+                
+                timestap=data['TIMESTAMP']
+                classs=data['CLASS']
+                phash=data["PREVIOUSHASH"]
+                hashh=data["HASH"]
+                listt.insertar(classs,timestap,phash,hashh)
+                temp=temp.siguiente
+                if(temp==lista.inicio):
+                    break
+            
+        self.diagramar.graphArboles(listt)
+
+        
+        
 
     def Arreglar(self,name):
         data=json.loads(name)
@@ -74,9 +146,9 @@ class CargaMasiva():
         classs=data['CLASS']
         #dat=str(data["DATA"])
         datt=json.dumps(data,indent=0)
-        P=datt.split('\n')
         phash=data["PREVIOUSHASH"]
-        datos="INDEX: "+index+"\n TIMESTAMP: "+timestap+"\n CLASS: "+classs+"\n DATA: "+P[0:5]+"\n PREVIOUSHASH: "+phash
+        hashh=data["HASH"]
+        datos="INDEX: "+index+"\n TIMESTAMP: "+timestap+"\n CLASS: "+classs+"\n DATA: "+datt[0:300]+"\n PREVIOUSHASH: "+phash+"\n HASH: "+hashh
         return datos
 
 

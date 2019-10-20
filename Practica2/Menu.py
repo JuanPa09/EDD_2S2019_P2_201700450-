@@ -1,8 +1,9 @@
-import os
+import os,sys
 import curses
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 from CargaMasiva import CargaMasiva
 from Estructuras import Arbol
+from Estructuras import ListaDoble
 import json
 
 
@@ -16,31 +17,35 @@ class Menu():
         self.phash="0000" #Hash
         self.cm=CargaMasiva()
         self.arbol=Arbol() #Arbol AVL
+        self.listajson=ListaDoble()
 
 
-    def Principal(self,listajson,json):
+    def Principal(self,json):
         os.system ("cls")
         print("######################### Menu Principal #########################")
         print("1. Insert block")
         print("2. Select block")
         print("3. Reportes")
+        print("4  Terminar")
         respuesta = input('').split("\\")[0]
         if (respuesta=="1"):
-            self.Insertar(listajson,json)
+            self.Insertar(json)
         elif respuesta=="2":
-            self.Select(listajson,json)
+            self.Select(self.listajson,json)
         elif respuesta=="3":
             self.Reportes()
+        elif respuesta=="4":
+            sys.exit()
         else:
-            self.Principal(listajson,json)
+            self.Principal(json)
 
-    def Insertar(self,listajson,json):
+    def Insertar(self,json):
         os.system("cls")
         print("######################### Insert block #########################")
         print("Nombre: ")
         bloque= input('').split("\\")[0]
-        listajson.insertarjson(json.cargarjson(bloque,str(self.index),self.phash)) #METODO QUE INSERTA LA CADENA EN LA LISTA DOBLEMENTE ENLAZADA
-        self.Principal(listajson,json)
+        self.listajson.insertarjson(json.cargarjson(bloque,str(self.index),self.phash)) #METODO QUE INSERTA LA CADENA EN LA LISTA DOBLEMENTE ENLAZADA
+        self.Principal(json)
 
 
     def Reportes(self):
@@ -50,7 +55,7 @@ class Menu():
         print("2. Tree Report")
         respuesta = input('').split("\\")[0]
         if (respuesta=="1"):
-            print("BlockChain Report")
+            self.cm.ListaArboles(self.listajson)
 
         elif respuesta=="2":
             self.TreeReport()
@@ -60,18 +65,23 @@ class Menu():
         print("######################### TreeReport #########################")
         print("1. Tree")
         print("2. Preorden")
-        print("4. Inorden")
-        print("2. Postorden")
+        print("3. Inorden")
+        print("4. Postorden")
         respuesta = input('').split("\\")[0]
         if (respuesta=="1"):
-            print("Tree")
-            self.cm.ArbolBinario(self.json_seleccionado,self.arbol)
+            #print("Tree")
+            self.cm.ArbolBinario(self.json_seleccionado)
+            self.TreeReport()
         elif respuesta=="2":
-            print("Preorden")
+            self.cm.Arbolpre(self.json_seleccionado)
+            self.TreeReport()
         elif respuesta=="3":
-            print("Inorden")
+            self.cm.Arbolin(self.json_seleccionado)
+            self.TreeReport()
         elif respuesta=="4":
-            print("Postorden")
+            self.cm.Arbolpost(self.json_seleccionado)
+            self.TreeReport()
+        
 
 
     def Select(self,listadoble,json):
@@ -98,7 +108,7 @@ class Menu():
         name = temp.json
         datos=self.cm.Arreglar(name)
         posnamex = 22
-        posnamey = 5
+        posnamey = 4
         for line in datos.splitlines():
             win.addstr(posnamey,posnamex,line)
             posnamey=posnamey+1
@@ -118,14 +128,17 @@ class Menu():
                 self.paint_title(win,' Select Block ')
                 temp=temp.siguiente
                 name = str(temp.json)
-                posnamex = 20
-                posnamey = 5
-                for line in name.splitlines():
+                datos=self.cm.Arreglar(name)
+                posnamex = 22
+                posnamey = 4
+                for line in datos.splitlines():
                     win.addstr(posnamey,posnamex,line)
                     posnamey=posnamey+1
 
-                win.addstr(10,5,'<--')
-                win.addstr(10,55,'-->')
+
+
+                win.addstr(15,5,'<--')
+                win.addstr(15,95,'-->')
 
                 stroke=1
 
@@ -134,23 +147,26 @@ class Menu():
                 self.paint_title(win,' Select Block ')
                 temp=temp.anterior
                 name = str(temp.json)
-                posnamex = 20
-                posnamey = 5
-                for line in name.splitlines():
+                datos=self.cm.Arreglar(name)
+                posnamex = 22
+                posnamey = 4
+                for line in datos.splitlines():
                     win.addstr(posnamey,posnamex,line)
                     posnamey=posnamey+1
 
-                win.addstr(10,5,'<--')
-                win.addstr(10,55,'-->')
+
+
+                win.addstr(15,5,'<--')
+                win.addstr(15,95,'-->')
                 stroke=1
             elif stroke==32:
                 #Name=temp.nombre
                 self.json_seleccionado=temp.json
                 win.clear()
                 curses.endwin()
-                self.Principal(listadoble,json)
+                self.Principal(json)
             else:
                 curses.endwin()
-                self.Principal(listadoble,json) 
+                self.Principal(json) 
 
 

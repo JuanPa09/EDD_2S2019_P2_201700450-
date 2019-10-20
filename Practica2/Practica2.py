@@ -15,7 +15,7 @@ menu=Menu()
 cm=CargaMasiva()
 
 
-menu.Principal(listajson,cm)
+menu.Principal(cm)
 
 
 
