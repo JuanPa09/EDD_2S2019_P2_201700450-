@@ -1,1 +1,1 @@
-from CargaMasiva import CargaMasiva
+server.send(message.encode('utf-8'))

@@ -4,6 +4,7 @@ from datetime import datetime
 from Graficas import Diagramas
 from Estructuras import Arbol
 from Estructuras import ListaDoble
+import hashlib
 class CargaMasiva():
 
     def __init__(self):
@@ -17,16 +18,26 @@ class CargaMasiva():
         df=pd.DataFrame(data=datos)
         clase=df.iloc[0,1]
         archivojson=df.iloc[1,1]
-        f=open('json.text',"w")
-        f.write("{\n")
-        f.write("   \"INDEX\": "+index+",\n")
-        f.write("   \"TIMESTAMP\": \""+str(timestamp)+"\",\n")
-        f.write("   \"CLASE\": \""+clase+"\",\n")
-        f.write("   \"DATA\": "+archivojson+",\n")
-        f.write("   \"PREVIOUSHASH\": \""+phash+"\",\n")
-        f.write("}")
-        f.close()
-        return str(archivojson)
+        #f=open('json.text',"w")
+        #f.write("{\n")
+        #f.write("   \"INDEX\": "+index+",\n")
+        #f.write("   \"TIMESTAMP\": \""+str(timestamp)+"\",\n")
+        #f.write("   \"CLASE\": \""+clase+"\",\n")
+        #f.write("   \"DATA\": "+archivojson+",\n")
+        #f.write("   \"PREVIOUSHASH\": \""+phash+"\",\n")
+        #f.write("}")
+        #f.close()
+        ajson="{\n"+"   \"INDEX\": "+index+",\n"+"   \"TIMESTAMP\": \""+str(timestamp)+"\",\n"+"   \"CLASE\": \""+clase+"\",\n"+"   \"DATA\": "+archivojson+",\n"+"   \"PREVIOUSHASH\": \""+phash+"\"\n"+"}"
+        data=json.loads(ajson)
+        print(data)
+        dat=json.dumps(data)
+        forhash=dat.replace(" ", "")
+        j = bytes(forhash, 'utf-8')
+        m= hashlib.sha256(j)
+        p=m.hexdigest()
+        ajson="{\n"+"   \"INDEX\": "+index+",\n"+"   \"TIMESTAMP\": \""+str(timestamp)+"\",\n"+"   \"CLASE\": \""+clase+"\",\n"+"   \"DATA\": "+archivojson+",\n"+"   \"PREVIOUSHASH\": \""+phash+"\",\n"+"   \"HASH\": \""+p+"\"\n"+"}"
+        return ajson
+        #return str(archivojson)
 
     def getDataI(self,raiz):
         try:

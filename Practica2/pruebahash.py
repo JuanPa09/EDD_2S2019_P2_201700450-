@@ -13,7 +13,7 @@ forhash=dat.replace(" ", "")
 #print(forhash)
 j = bytes(forhash, 'utf-8')
 m= hashlib.sha256(j)
-#print(m.hexdigest())
+print(m.hexdigest())
 
     
 

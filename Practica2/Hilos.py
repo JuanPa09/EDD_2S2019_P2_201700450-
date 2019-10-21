@@ -8,16 +8,17 @@ class Hilos():
     tiempo=0
 
     def pross1 (self):
+        time.sleep(5)
         print("Hilo1")
-        time.sleep(1)
         if self.tiempo == 0:
             self.pross1()
         else:
             return  
 
     def pross2 (self):
-        print("Hilo2")
         time.sleep(3)
+        print("Hilo2")
+        
         
         if self.tiempo==0:
             self.pross2()

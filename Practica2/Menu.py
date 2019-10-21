@@ -10,14 +10,15 @@ import json
 
 class Menu():
 
-    def __init__(self):
+    def __init__(self,lista,server):
         self.index=0
         self.json_seleccionado=None
         self.json_entrada=None #Cadena Json
         self.phash="0000" #Hash
         self.cm=CargaMasiva()
         self.arbol=Arbol() #Arbol AVL
-        self.listajson=ListaDoble()
+        self.listajson=lista
+        self.server=server
 
 
     def Principal(self,json):
@@ -30,11 +31,15 @@ class Menu():
         respuesta = input('').split("\\")[0]
         if (respuesta=="1"):
             self.Insertar(json)
+            self.Principal(json)
         elif respuesta=="2":
             self.Select(self.listajson,json)
+            self.Principal(json)
         elif respuesta=="3":
             self.Reportes()
+            self.Principal(json)
         elif respuesta=="4":
+            self.server.close()
             sys.exit()
         else:
             self.Principal(json)
@@ -44,8 +49,9 @@ class Menu():
         print("######################### Insert block #########################")
         print("Nombre: ")
         bloque= input('').split("\\")[0]
-        self.listajson.insertarjson(json.cargarjson(bloque,str(self.index),self.phash)) #METODO QUE INSERTA LA CADENA EN LA LISTA DOBLEMENTE ENLAZADA
-        self.Principal(json)
+        #self.listajson.insertarjson(json.cargarjson(bloque,str(self.index),self.phash)) #METODO QUE INSERTA LA CADENA EN LA LISTA DOBLEMENTE ENLAZADA
+        message=json.cargarjson(bloque,str(self.index),self.phash)
+        self.server.send(message.encode('utf-8'))
 
 
     def Reportes(self):
@@ -53,12 +59,14 @@ class Menu():
         print("######################### Reportes #########################")
         print("1. BlockChain Report")
         print("2. Tree Report")
+        print("3. Menu Principal")
         respuesta = input('').split("\\")[0]
         if (respuesta=="1"):
             self.cm.ListaArboles(self.listajson)
 
         elif respuesta=="2":
             self.TreeReport()
+        
 
     def TreeReport(self):
         os.system("cls")
@@ -67,6 +75,7 @@ class Menu():
         print("2. Preorden")
         print("3. Inorden")
         print("4. Postorden")
+        print("5. Regresar")
         respuesta = input('').split("\\")[0]
         if (respuesta=="1"):
             #print("Tree")
@@ -81,6 +90,8 @@ class Menu():
         elif respuesta=="4":
             self.cm.Arbolpost(self.json_seleccionado)
             self.TreeReport()
+        elif respuesta=="5":
+            self.Reportes()
         
 
 
