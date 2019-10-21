@@ -3,7 +3,7 @@ import pandas as pd
 import json
 
 #CON ESTO GENERO EL HASH
-datos=pd.read_csv('data.csv',header=None)
+datos=pd.read_csv('data2.csv',header=None)
 #tam=len(datos)
 df=pd.DataFrame(data=datos)
 archivojson=df.iloc[1,1]
@@ -13,7 +13,8 @@ forhash=dat.replace(" ", "")
 #print(forhash)
 j = bytes(forhash, 'utf-8')
 m= hashlib.sha256(j)
-print(m.hexdigest())
+print(data["PREVIOUSHASH"])
+#print(m.hexdigest())
 
     
 
@@ -27,15 +28,17 @@ with open('data.json') as contenido:
     cursos=json.load(contenido)
     #print(cursos)
     #cursos=json.dumps(curso)
-
+#cursos=json.dumps(curso)
 index=str(cursos["INDEX"])
 timestap=cursos['TIMESTAMP']
 classs=cursos['CLASS']
 data=cursos["DATA"]
+dum=json.dumps(data)
+#print(dum)
 phash=cursos["PREVIOUSHASH"]
 
 parametros=str(index)+str(timestap)+str(classs)+str(data)+str(phash)
-print(parametros)
+#print(parametros)
 
 
 #for state in cursos['data']:

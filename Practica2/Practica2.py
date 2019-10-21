@@ -3,7 +3,8 @@ import Menu
 import pandas as pd
 import select
 import socket
-#import Conexion
+import json
+import hashlib
 
 from Estructuras import ArbolBinario
 from Estructuras import ListaDoble
@@ -40,14 +41,28 @@ class Hilos():
                     message = socks.recv(2048)
                     mensaje=message.decode('utf-8')
                     if mensaje=="true":
-                        print("Es un true")
-                        #insertar a la lista
+                        try:
+                            menu.listajson.insertarjson(menu.json_entrada)
+                            menu.index=getIndex(menu.json_entrada)
+                            menu.phash=getPhash(menu.json_entrada)
+                        except:
+                            a=1
+
                     elif mensaje=="false":
-                        print("Es un false")
-                        #no hacer nada
+                        print("Hash incorrecto")
                     else:
-                        menu.json_entrada=message
-                        
+                        try:
+                            menu.json_entrada=mensaje
+                            g=comprobar(mensaje)
+                            if g==True:
+                                msg="true"
+                            else:
+                                msg="false"
+                            server.send(msg.encode('utf-8'))
+                        except:
+                            a=1
+                            
+                            
                         #print("Es un json")
                         #Obtener el json
                         #Crear Hash y comprobar
@@ -104,9 +119,38 @@ t3.join()
 t1.join()
 #t2.join()
 
-def comprobar(json):
+def comprobar(ajson):
+    data=json.loads(ajson)
+    index=data["INDEX"]
+    timestamp=data["TIMESTAMP"]
+    clase=data["CLASS"]
+    datos=data["DATA"]
+    phas=data["PREVIOUSHASH"]
+    hassh=data["HASH"] #HASH RECIBIDO
+    dat=json.dumps(datos)
+    forhash=dat.replace(" ", "") #cadena para hacer el hash
+    forhash2=index+timestamp+clase+forhash+phas
+    j = bytes(forhash2, 'utf-8')
+    m= hashlib.sha256(j)
+    p=m.hexdigest() #EL HASH OBTENIDO
+    hashobtenido=p
+    if hashobtenido==hassh:
+        return True
+    else:
+        return False
+
+def getPhash(ajson):
+    data=json.loads(ajson)
+    phash=data["PREVIOUSHASH"]
+    return phash
+
+def getIndex(ajson):
+    data=json.loads(ajson)
+    index=data["INDEX"]
+    return index
+
+            
     
-    print("hola")
 
 
 

@@ -1,5 +1,9 @@
 class,Estructuras de datos
 data,"{
+  ""INDEX"": 2,
+  ""TIMESTAMP"": ""02-10-19-::14:30:25"",
+  ""CLASS"": ""Estructuras de datos"",
+  ""DATA"": {
     ""value"": ""201403525-Nery"",
     ""left"": {
       ""value"": ""201212963-Andres"",
@@ -27,4 +31,7 @@ data,"{
         ""right"": null
       }
     }
-  }"
+  },
+  ""PREVIOUSHASH"": ""fd5f6d5fdfdf232Y232312QW12196255"",
+  ""HASH"": ""34334523435252DWDSDSDSDSsdsDEDS12121""
+}"
