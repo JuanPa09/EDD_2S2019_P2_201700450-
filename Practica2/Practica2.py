@@ -43,7 +43,7 @@ class Hilos():
                     if mensaje=="true":
                         try:
                             menu.listajson.insertarjson(menu.json_entrada)
-                            menu.index=getIndex(menu.json_entrada)
+                            menu.index=getIndex(menu.json_entrada)+1
                             menu.phash=getPhash(menu.json_entrada)
                         except:
                             a=1
